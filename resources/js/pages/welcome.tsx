@@ -8,6 +8,7 @@ import { useState } from 'react';
 export default function Welcome() {
     const { auth, link } = usePage<SharedData>().props;
     const [qr, setQr] = useState<any>(null);
+
     const getQr = async () =>
         await axios
             .get('/api/qr', { params: { link: auth.user && !auth.user?.is_admin ? route('user.show', auth.user.id) : route('register') } })

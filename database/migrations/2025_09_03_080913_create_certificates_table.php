@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('certificates', function (Blueprint $table) {
             $table->id();
+            $table->string('title')->nullable();
+            $table->longText('content')->nullable();
+            $table->string('reference')->nullable();
+            $table->string('path')->nullable();
+            $table->foreignId('participant_id')->constrained()->onDelete('cascade');
+
             $table->timestamps();
         });
     }
