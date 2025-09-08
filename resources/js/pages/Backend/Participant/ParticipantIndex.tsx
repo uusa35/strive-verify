@@ -1,22 +1,17 @@
 import { MainDataTable } from '@/components/MainDataTable';
 import Pagination from '@/components/Pagination';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import AppLayout from '@/layouts/app-layout';
 import { appName } from '@/lib/constants';
 import backend, { home as backendHome } from '@/routes/backend';
 import { BreadcrumbItem, SharedData } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, Delete, Edit2, LucideGraduationCap, MoreHorizontalIcon } from 'lucide-react';
+import { ArrowUpDown, Delete, Edit2, LucideGraduationCap, MoreHorizontalIcon, PlusSquareIcon } from 'lucide-react';
 import { useMemo } from 'react';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: backendHome().url,
-    },
-];
 type Props = {
     id: string;
     name: string;
@@ -24,7 +19,13 @@ type Props = {
 };
 
 export default function ({ elements }: SharedData) {
-    console.log('elements', elements?.links);
+    console.log('elements', elements);
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'لوحة التحكم',
+            href: backendHome().url,
+        },
+    ];
     const columns: ColumnDef<Props>[] = useMemo(
         () => [
             {
@@ -64,7 +65,6 @@ export default function ({ elements }: SharedData) {
                     );
                 },
             },
-
             {
                 accessorKey: 'type',
                 header: ({ column }: any) => {
@@ -79,15 +79,50 @@ export default function ({ elements }: SharedData) {
                     return <div className="text-xxs truncate">{row.original.type}</div>;
                 },
             },
-
+            {
+                accessorKey: 'certificates_count',
+                header: ({ column }: any) => {
+                    return (
+                        <Button variant="ghost" className="!p-0 capitalize" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+                            عدد الشهادات
+                            <ArrowUpDown className="mx-2 h-4 w-4" />
+                        </Button>
+                    );
+                },
+                cell: ({ row }: any) => {
+                    return (
+                        <div className="text-xxs flex size-10 items-center justify-center rounded-lg border bg-gray-200">
+                            {row.original.certificates_count}
+                        </div>
+                    );
+                },
+            },
+            {
+                accessorKey: 'active',
+                header: ({ column }: any) => {
+                    return (
+                        <Button variant="ghost" className="!p-0 capitalize" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+                            حالة المشارك
+                            <ArrowUpDown className="mx-2 h-4 w-4" />
+                        </Button>
+                    );
+                },
+                cell: ({ row }: any) => {
+                    return (
+                        <Badge
+                            variant="default"
+                            className={`h-2 w-2 rounded-full p-0 ${row.original.active ? `bg-green-600` : `bg-red-600`}`}
+                        ></Badge>
+                    );
+                },
+            },
             {
                 accessorKey: 'actions',
                 header: () => <div className="!p-0 capitalize">المزيد</div>,
                 enableColumnFilter: false,
                 enableGlobalFilter: false,
                 enableSorting: false,
-                cell: ({ row }) => {
-                    const element: any = row.original;
+                cell: ({ row }: any) => {
                     return (
                         <DropdownMenu dir="rtl">
                             <DropdownMenuTrigger>
@@ -95,17 +130,36 @@ export default function ({ elements }: SharedData) {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 <DropdownMenuItem className="flex flex-row space-x-1">
-                                    <div>
-                                        <Edit2 />
-                                    </div>
-                                    <div>تعديل البيانات</div>
+                                    <Link className="flex flex-row space-x-1" href={backend.participant.edit(row.original.id).url}>
+                                        <div>
+                                            <Edit2 />
+                                        </div>
+                                        <div>تعديل البيانات</div>
+                                    </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem className="flex flex-row space-x-1">
-                                    <div>
-                                        <LucideGraduationCap />
-                                    </div>
-                                    <div>قائمة الشهادات</div>
+                                <DropdownMenuItem>
+                                    <Link
+                                        className="flex flex-row space-x-1"
+                                        href={backend.certificate.index({ query: { participant_id: row.original?.id } }).url}
+                                    >
+                                        <div>
+                                            <LucideGraduationCap />
+                                        </div>
+                                        <div>قائمة الشهادات</div>
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem>
+                                    <Link
+                                        className="flex flex-row space-x-1"
+                                        href={backend.certificate.create({ query: { participant_id: row.original?.id } }).url}
+                                    >
+                                        <div>
+                                            <PlusSquareIcon />
+                                        </div>
+                                        <div>إنشاء شهادة جديدة</div>
+                                    </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem className="flex flex-row space-x-1">
@@ -127,8 +181,11 @@ export default function ({ elements }: SharedData) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`${appName} - قائمة المشاركين`} />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+                <div className="flex flex-row items-center justify-between gap-4">
                     <h1>قائمة المشاركين</h1>
+                    <Button variant="outline" className="w-1/4" asChild>
+                        <Link href={backend.participant.create().url}>إنشاء مشارك جديد</Link>
+                    </Button>
                 </div>
                 <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">
                     {elements ? (

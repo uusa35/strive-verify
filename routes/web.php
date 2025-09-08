@@ -4,6 +4,7 @@ use App\Http\Controllers\Backend\ParticipantController;
 use App\Http\Controllers\Backend\CertificateController;
 use App\Http\Controllers\Backend\HomeController;
 use App\Http\Controllers\Frontend\FrontendCertificateController;
+use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,6 +19,9 @@ Route::group(
         Route::get('home', HomeController::class)->name('home');
         Route::resource('participant', ParticipantController::class);
         Route::resource('certificate', CertificateController::class);
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     }
 );
 

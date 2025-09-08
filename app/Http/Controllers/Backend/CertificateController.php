@@ -27,7 +27,7 @@ class CertificateController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('Backend/Certificate/CertificateCreate');
     }
 
     /**
@@ -35,7 +35,17 @@ class CertificateController extends Controller
      */
     public function store(StoreCertificateRequest $request)
     {
-        //
+        $element = Certificate::create($request->except('image', 'path'));
+        $request->file("image") ? $this->saveMimes(
+            $element,
+            $request,
+            ["image"],
+            ["1920", "1080"],
+            true,
+            false
+        ) : null;
+        $request->file("path") ? $this->savePath($element, $request, "path") : null;
+        return redirect()->route('backend.certificate.index', ['participant_id' => $element->participant_id])->with('success', 'تم إضافة الشهادة');
     }
 
     /**

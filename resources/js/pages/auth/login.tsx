@@ -16,7 +16,7 @@ interface LoginProps {
 
 export default function Login({ status, canResetPassword }: LoginProps) {
     return (
-        <AuthLayout title="تسجيل الخدول للحساب" description="ادخل البريد الإلكتروني المسجل وكلمة المرور">
+        <AuthLayout title="تسجيل دخول للحساب" description="ادخل البريد الإلكتروني المسجل وكلمة المرور">
             <Head title="معهد سترايف التعليمي" />
 
             <Form {...AuthenticatedSessionController.store.form()} resetOnSuccess={['password']} className="flex flex-col gap-6">

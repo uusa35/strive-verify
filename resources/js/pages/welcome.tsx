@@ -4,11 +4,9 @@ import { login, logout, register } from '@/routes';
 import { home as backendHome } from '@/routes/backend';
 import { type SharedData } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { useState } from 'react';
 
 export default function Welcome() {
-    const { auth, link } = usePage<SharedData>().props;
-    const [qr, setQr] = useState<any>(null);
+    const { auth } = usePage<SharedData>().props;
     const cleanup = useMobileNavigation();
 
     const handleLogout = () => {

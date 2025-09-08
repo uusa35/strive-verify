@@ -28,7 +28,8 @@ export interface SharedData {
     auth: Auth;
     sidebarOpen: boolean;
     elements?: { data: any, links: any },
-    [key: string]: unknown;
+    element?: any;
+    [key: string]: any;
 }
 
 export interface User {

@@ -22,7 +22,8 @@ class StoreCertificateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'path' => 'required|max:100000|mimes:xlsx,doc,docx,ppt,pptx,pdf,zip',
+            'participant_id' => 'required|exists:participants,id',
         ];
     }
 }

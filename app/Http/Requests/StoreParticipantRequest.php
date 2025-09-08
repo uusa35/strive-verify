@@ -11,7 +11,7 @@ class StoreParticipantRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return request()->user()->id == 1;
     }
 
     /**
@@ -21,8 +21,15 @@ class StoreParticipantRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
-            //
+            'name' => 'required|min:3|max:255',
+            'title' => 'nullable|min:3|max:255',
+            'email' => 'nullable|min:3|max:255',
+            'mobile' => 'nullable|min:3|max:255',
+            'civil_id' => 'nullable|min:3|max:255',
+            'active' => 'required|in:1,0',
+            'type' => 'required|in:student,teacher,employee',
         ];
     }
 }

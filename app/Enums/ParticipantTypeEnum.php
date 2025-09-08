@@ -4,8 +4,8 @@ namespace App\Enums;
 
 enum ParticipantTypeEnum: string
 {
-    case STUDENT = 'stduent';
-    case EMPLOYEE = ' employee';
+    case STUDENT = 'student';
+    case EMPLOYEE = 'employee';
     case TEACHER = 'teacher';
 
 
@@ -13,7 +13,7 @@ enum ParticipantTypeEnum: string
     public function label(): string
     {
         return match ($this) {
-            static::STUDENT => 'stduent',
+            static::STUDENT => 'student',
             static::EMPLOYEE => 'employee',
             static::TEACHER => 'teacher',
         };

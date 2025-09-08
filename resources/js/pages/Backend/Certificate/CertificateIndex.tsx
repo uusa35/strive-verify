@@ -13,19 +13,23 @@ import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, Delete, Download, Edit2, LucideGraduationCap, MoreHorizontalIcon } from 'lucide-react';
 import { useMemo } from 'react';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: home().url,
-    },
-];
 type Props = {
     id: string;
     name: string;
     date: string;
 };
 
-export default function ({ elements }: SharedData) {
+export default function ({ elements, query }: SharedData) {
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'لوحة التحكم',
+            href: home().url,
+        },
+        {
+            title: 'قائمة الشهادات',
+            href: backend.certificate.index({ query: query ? { ...query } : {} }).url,
+        },
+    ];
     const columns: ColumnDef<Props>[] = useMemo(
         () => [
             {
@@ -160,7 +164,7 @@ export default function ({ elements }: SharedData) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`${appName} - قائمة الشهادات`} />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+                <div className="flex flex-row items-center justify-between gap-4">
                     <h1>قائمة الشهادات</h1>
                 </div>
                 <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">

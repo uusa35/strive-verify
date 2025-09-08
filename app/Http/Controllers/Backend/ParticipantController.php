@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\ParticipantTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreParticipantRequest;
 use App\Http\Requests\UpdateParticipantRequest;
@@ -15,9 +16,9 @@ class ParticipantController extends Controller
     public function index()
     {
         if (request()->has('type')) {
-            $elements = Participant::where('type', request('type'))->orderBy('id', 'desc')->paginate(SELF::TAKE_MAX);
+            $elements = Participant::where('type', request('type'))->orderBy('id', 'desc')->withCount('certificates')->paginate(SELF::TAKE_MAX);
         } else {
-            $elements = Participant::orderBy('id', 'desc')->paginate(SELF::TAKE_MAX);
+            $elements = Participant::orderBy('id', 'desc')->withCount('certificates')->paginate(SELF::TAKE_MAX);
         }
         return inertia('Backend/Participant/ParticipantIndex', compact('elements'));
     }
@@ -27,7 +28,8 @@ class ParticipantController extends Controller
      */
     public function create()
     {
-        return inertia('Backend/Participant/ParticipantCreate');
+        $types = collect(ParticipantTypeEnum::cases())->pluck('value');
+        return inertia('Backend/Participant/ParticipantCreate', compact('types'));
     }
 
     /**
@@ -35,7 +37,8 @@ class ParticipantController extends Controller
      */
     public function store(StoreParticipantRequest $request)
     {
-        //
+        Participant::create($request->validated());
+        return redirect()->route('backend.participant.index')->with('success', 'تم إضافة المشارك');
     }
 
     /**
@@ -48,7 +51,8 @@ class ParticipantController extends Controller
      */
     public function edit(Participant $participant)
     {
-        return inertia('Backend/Participant/ParticipantEdit', compact('participant'));
+        $types = collect(ParticipantTypeEnum::cases())->pluck('value');
+        return inertia('Backend/Participant/ParticipantEdit', ['element' => $participant, 'types' => $types]);
     }
 
     /**
@@ -56,7 +60,9 @@ class ParticipantController extends Controller
      */
     public function update(UpdateParticipantRequest $request, Participant $participant)
     {
-        //
+        
+        $participant->update($request->validated());
+        return redirect()->route('backend.participant.index')->with('success', 'تم تعديل المشارك');
     }
 
     /**
@@ -64,6 +70,8 @@ class ParticipantController extends Controller
      */
     public function destroy(Participant $participant)
     {
-        //
+        $participant->certificates()->delete();
+        $participant->delete();
+        return redirect()->back()->with('success', 'تم حذف المشارك');
     }
 }

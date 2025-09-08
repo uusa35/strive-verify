@@ -167,3 +167,14 @@ input {
         @apply bg-background text-foreground;
     }
 }
+
+.required:after {
+    content: ' *';
+}
+.sun-editor {
+    ul,
+    ol {
+        list-style-type: disc !important; /* Force bullets */
+        padding-left: 20px !important; /* Ensure indentation */
+    }
+}

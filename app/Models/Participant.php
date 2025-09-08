@@ -12,6 +12,11 @@ class Participant extends Model
     /** @use HasFactory<\Database\Factories\ParticipantFactory> */
     use HasFactory;
 
+    protected $guarded = ['id'];
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
     protected $casts = [
         'type' => ParticipantTypeEnum::class,
     ];
