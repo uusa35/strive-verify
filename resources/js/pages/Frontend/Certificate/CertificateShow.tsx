@@ -2,7 +2,6 @@ import Frontend from '@/actions/App/Http/Controllers/Frontend';
 import { appName, baseUrl } from '@/lib/constants';
 import { login, register } from '@/routes';
 import { home as backendHome } from '@/routes/backend';
-import certificate from '@/routes/certificate';
 import { Head, Link, usePage } from '@inertiajs/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -111,7 +110,7 @@ export default function () {
                             </ul>
                         </div>
                         <div className="relative -mb-px aspect-[335/376] w-full shrink-0 overflow-hidden bg-white lg:mb-0 lg:-ml-px lg:aspect-auto lg:w-[438px] dark:bg-[#1D0002]">
-                            <div className="flex h-full items-center justify-center">
+                            <div className="mt-[5%] flex h-full items-start justify-center">
                                 {qr && <div dangerouslySetInnerHTML={{ __html: qr }} className="flex h-auto w-full items-center justify-center" />}
                             </div>
                             <div className="absolute inset-0 shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]" />

@@ -13,6 +13,6 @@ class CertificateSeeder extends Seeder
      */
     public function run(): void
     {
-        Certificate::factory(app()->environment('production') ? 1 : 100)->create();
+        Certificate::factory(app()->environment('production') ? 1 : 200)->create();
     }
 }

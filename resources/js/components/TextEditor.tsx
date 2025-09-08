@@ -1,4 +1,4 @@
-import SunEditor, { buttonList } from "suneditor-react";
+import SunEditor, { buttonList } from 'suneditor-react';
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor"s CSS File
 
 type Props = {

@@ -11,7 +11,7 @@ class StoreCertificateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return request()->user()->id == 1;
     }
 
     /**
@@ -22,8 +22,12 @@ class StoreCertificateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'title' => 'required|min:3|max:255',
+            'content' => 'nullable',
             'path' => 'required|max:100000|mimes:xlsx,doc,docx,ppt,pptx,pdf,zip',
+            'image' => 'nullable|image|max:100000',
             'participant_id' => 'required|exists:participants,id',
+            'active' => 'required|in:1,0',
         ];
     }
 }
