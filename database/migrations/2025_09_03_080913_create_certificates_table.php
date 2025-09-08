@@ -17,8 +17,9 @@ return new class extends Migration
             $table->longText('content')->nullable();
             $table->string('reference')->nullable();
             $table->string('path')->nullable();
+            $table->string('image')->default('default.png')->nullable();
             $table->foreignId('participant_id')->constrained()->onDelete('cascade');
-
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\ParticipantTypeEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,8 @@ class ParticipantFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->sentence(),
+            'type' => fake()->randomElement(ParticipantTypeEnum::cases()),
         ];
     }
 }

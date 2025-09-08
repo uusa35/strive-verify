@@ -51,7 +51,8 @@ function BreadcrumbLink({
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
   return (
-    <span
+      <span
+          
       data-slot="breadcrumb-page"
       role="link"
       aria-disabled="true"

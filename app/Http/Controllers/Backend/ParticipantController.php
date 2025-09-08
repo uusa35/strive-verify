@@ -14,7 +14,12 @@ class ParticipantController extends Controller
      */
     public function index()
     {
-        //
+        if (request()->has('type')) {
+            $elements = Participant::where('type', request('type'))->orderBy('id', 'desc')->paginate(SELF::TAKE_MAX);
+        } else {
+            $elements = Participant::orderBy('id', 'desc')->paginate(SELF::TAKE_MAX);
+        }
+        return inertia('Backend/Participant/ParticipantIndex', compact('elements'));
     }
 
     /**
@@ -22,7 +27,7 @@ class ParticipantController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('Backend/Participant/ParticipantCreate');
     }
 
     /**
@@ -36,17 +41,14 @@ class ParticipantController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Participant $participant)
-    {
-        //
-    }
+    public function show(Participant $participant) {}
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Participant $participant)
     {
-        //
+        return inertia('Backend/Participant/ParticipantEdit', compact('participant'));
     }
 
     /**

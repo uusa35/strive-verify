@@ -19,5 +19,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'it@strivedu.com',
         ]);
+        $this->call(ParticipantSeeder::class);
+        $this->call(CertificateSeeder::class);
     }
 }

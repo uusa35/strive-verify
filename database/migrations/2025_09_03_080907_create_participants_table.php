@@ -14,7 +14,12 @@ return new class extends Migration
         Schema::create('participants', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('title')->nullable();
+            $table->string('email')->nullable();
+            $table->string('mobile')->nullable();
+            $table->string('civil_id')->nullable();
             $table->string('type')->default('student');
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

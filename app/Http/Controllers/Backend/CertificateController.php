@@ -14,7 +14,12 @@ class CertificateController extends Controller
      */
     public function index()
     {
-        //
+        if (request()->has('participant_id')) {
+            $elements = Certificate::where('participant_id', request('participant_id'))->orderBy('id', 'desc')->paginate(SELF::TAKE_MAX);
+        } else {
+            $elements = Certificate::orderBy('id', 'desc')->paginate(SELF::TAKE_MAX);;
+        }
+        return inertia('Backend/Certificate/CertificateIndex', compact('elements'));
     }
 
     /**
@@ -38,7 +43,8 @@ class CertificateController extends Controller
      */
     public function show(Certificate $certificate)
     {
-        //
+        $element = $certificate->load('participant');
+        return inertia('Backend/Certificate/CertificateShow', compact('element'));
     }
 
     /**

@@ -1,20 +1,20 @@
+import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { getImage } from '@/lib/constants';
-import { dashboard, login, register } from '@/routes';
+import { login, logout, register } from '@/routes';
+import { home as backendHome } from '@/routes/backend';
 import { type SharedData } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
-import axios from 'axios';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
 export default function Welcome() {
     const { auth, link } = usePage<SharedData>().props;
     const [qr, setQr] = useState<any>(null);
+    const cleanup = useMobileNavigation();
 
-    const getQr = async () =>
-        await axios
-            .get('/api/qr', { params: { link: auth.user && !auth.user?.is_admin ? route('user.show', auth.user.id) : route('register') } })
-            .then((r) => {
-                setQr(r.data);
-            });
+    const handleLogout = () => {
+        cleanup();
+        router.flushAll();
+    };
 
     return (
         <>
@@ -26,12 +26,17 @@ export default function Welcome() {
                 <header className="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
                     <nav className="flex items-center justify-end gap-4">
                         {auth.user ? (
-                            <Link
-                                href={dashboard()}
-                                className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                            >
-                                Dashboard
-                            </Link>
+                            <>
+                                <Link
+                                    href={backendHome()}
+                                    className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                >
+                                    لوحة التحكم
+                                </Link>
+                                <Link href={logout()} as="button" onClick={handleLogout}>
+                                    تسجيل الخروج
+                                </Link>
+                            </>
                         ) : (
                             <>
                                 <Link

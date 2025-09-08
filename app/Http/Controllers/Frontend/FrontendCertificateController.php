@@ -38,7 +38,8 @@ class FrontendCertificateController extends Controller
      */
     public function show(Certificate $certificate)
     {
-        //
+        $element = $certificate->load('participant');
+        return inertia('Frontend/Certificate/CertificateShow', compact('element'));
     }
 
     /**

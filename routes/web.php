@@ -2,24 +2,25 @@
 
 use App\Http\Controllers\Backend\ParticipantController;
 use App\Http\Controllers\Backend\CertificateController;
+use App\Http\Controllers\Backend\HomeController;
 use App\Http\Controllers\Frontend\FrontendCertificateController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
 
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
-Route::middleware(['auth', 'verified', 'adminAccess'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
-    Route::resource('paricipant', ParticipantController::class);
-    Route::resource('certificate', CertificateController::class);
-});
-
+Route::group(
+    ['prefix' => 'backend', 'as' => 'backend.', 'middleware' => ['auth', 'verified', 'adminAccess']],
+    function () {
+        Route::get('home', HomeController::class)->name('home');
+        Route::resource('participant', ParticipantController::class);
+        Route::resource('certificate', CertificateController::class);
+    }
+);
 
 Route::resource('certificate', FrontendCertificateController::class)->only('show');
-
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

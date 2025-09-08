@@ -1,6 +1,7 @@
 import { sample, times } from "lodash";
 import { BrickWall, Handshake, HeartHandshakeIcon } from "lucide-react";
 
+export const appName = import.meta.env.VITE_APP_NAME;
 export const baseUrl = import.meta.env.VITE_APP_URL;
 export const apiUrl = `${baseUrl}api/`;
 export const appVersion = `0.0.1`;
