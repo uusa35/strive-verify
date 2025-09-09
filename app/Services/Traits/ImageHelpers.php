@@ -143,8 +143,8 @@ trait ImageHelpers
     {
         try {
             if ($request->hasFile($colName)) {
-                $path = $request->file($colName)->storePublicly('storage/uploads/files');
-                $path = str_replace('storage/uploads/files/', '', $path);
+                $path = $request->file($colName)->store('uploads/files', 'public');
+                $path = str_replace('uploads/files/', '', $path);
                 $element->update([$colName => $path]);
             }
         } catch (\Exception $e) {
