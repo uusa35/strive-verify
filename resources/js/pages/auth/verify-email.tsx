@@ -24,11 +24,11 @@ export default function VerifyEmail({ status }: { status?: string }) {
                     <>
                         <Button disabled={processing} variant="secondary">
                             {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                            Resend verification email
+                            إعادة ارسال التفعيل
                         </Button>
 
                         <TextLink href={logout()} className="mx-auto block text-sm">
-                            Log out
+                            تسجيل الخروج
                         </TextLink>
                     </>
                 )}
