@@ -43,7 +43,7 @@ trait ImageHelpers
             foreach ($inputNames as $key => $inputName) {
                 if ($request->hasFile($inputName)) {
                     if (in_array($request->file($inputName)->extension(), ['pdf', 'ppt'], true)) {
-                        $path = $request->$inputName->store('public/uploads/files');
+                        $path = $request->$inputName->storePublicly('public/uploads/files');
                         $path = str_replace('public/uploads/files/', '', $path);
                         $model->update([
                             $inputName => $path,
