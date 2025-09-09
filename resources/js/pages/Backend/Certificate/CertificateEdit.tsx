@@ -1,31 +1,37 @@
 import InputError from '@/components/input-error';
+import { TextEditor } from '@/components/TextEditor';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import { appName } from '@/lib/constants';
 import backend from '@/routes/backend';
 import { BreadcrumbItem, SharedData } from '@/types';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
-import { FormEventHandler } from 'react';
+import { Download, LoaderCircle, UploadIcon } from 'lucide-react';
+import { ChangeEvent, FormEventHandler } from 'react';
 
 interface FormProps {
     title: string;
     content: boolean;
     path: string;
     image: string;
+    active: boolean;
+    reference: string;
 }
-export default function ({ types, element }: SharedData) {
-    const { errors } = usePage().props;
+export default function ({ element }: SharedData) {
+    const { errors, query }: any = usePage().props;
     const { data, setData, put, processing }: any = useForm({
-        title: element.title,
-        content: element.content,
+        title: element?.title,
+        content: element?.content,
         path: element.path,
         image: element.image,
+        reference: element.reference,
+        active: element.active,
         participant_id: element.participant_id,
     });
+
+    console.log('element', element);
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -38,8 +44,8 @@ export default function ({ types, element }: SharedData) {
         },
 
         {
-            title: 'إنشاء شهادة',
-            href: backend.certificate.create().url,
+            title: 'تعديل شهادة',
+            href: backend.certificate.edit(element.id).url,
         },
     ];
 
@@ -53,9 +59,9 @@ export default function ({ types, element }: SharedData) {
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         router.post(
-            backend.certificate.create().url,
+            backend.certificate.update(element.id).url,
             {
-                _method: 'post',
+                _method: 'put',
                 ...data,
             },
             {
@@ -67,66 +73,106 @@ export default function ({ types, element }: SharedData) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`${appName} - إنشاء شهادة `} />
+            <Head title={`${appName} - تعديل شهادة `} />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <h1>إنشاء شهادة </h1>
+                    <h1>تعديل شهادة </h1>
                 </div>
                 <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">
                     <form onSubmit={submit} className="flex flex-col gap-6">
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <div className="grid gap-2">
-                                <Label htmlFor="name" aria-required className="required">
-                                    الاسم بالكامل
+                                <Label htmlFor="title" aria-required className="required">
+                                    عنوان الشهادة
                                 </Label>
                                 <Input
-                                    id="name"
+                                    id="title"
                                     type="text"
                                     required
                                     autoFocus
                                     tabIndex={1}
-                                    defaultValue={data.name}
-                                    onChange={(e) => setData('name', e.target.value)}
-                                    name="name"
-                                    placeholder="Full name"
-                                />
-                                <InputError message={errors.name} className="mt-2" />
-                            </div>
-                            <div className="grid gap-2">
-                                {/* // type */}
-                                <Label htmlFor="type" aria-required>
-                                    الشهادة
-                                </Label>
-                                <Select dir="rtl" name="type" defaultValue={data.type} onValueChange={(e: any) => setData('type', e)}>
-                                    <SelectTrigger className="">
-                                        <SelectValue placeholder="نوع الشهادة" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {types &&
-                                            types?.map((t: any, i: number) => (
-                                                <SelectItem value={t} key={i}>
-                                                    {t}
-                                                </SelectItem>
-                                            ))}
-                                    </SelectContent>
-                                </Select>
-                                <InputError message={errors.type} className="mt-2" />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="title">اللقب</Label>
-                                <Input
-                                    id="title"
-                                    type="text"
-                                    autoFocus
-                                    tabIndex={1}
                                     defaultValue={data.title}
                                     onChange={(e) => setData('title', e.target.value)}
-                                    autoComplete="title"
                                     name="title"
-                                    placeholder="title"
+                                    placeholder="Full name"
                                 />
                                 <InputError message={errors.title} className="mt-2" />
                             </div>
+                            {/* content */}
+                            <div className="col-span-full">
+                                <Label htmlFor="title" aria-required className="required">
+                                    محتوى الشهادة
+                                </Label>
+                                <TextEditor name="content" setData={setData} data={data} defaultValue={data.content} />
+                                <InputError message={errors.content} className="mt-2" />
+                            </div>
+                            {/* file */}
+                            <div className="col-span-full mb-2">
+                                <div className="flex h-24 w-full flex-col items-center justify-center rounded-2xl border border-gray-200 bg-transparent">
+                                    <Label
+                                        htmlFor="file"
+                                        aria-required
+                                        className="relative top-4 z-0 flex w-full flex-1 flex-col items-center justify-center gap-y-4"
+                                    >
+                                        <Download />
+                                        <div className="normal-text text-theme-700">{data.file ? data.file.name : 'اضغط لتحميل الشهادة'}</div>
+                                    </Label>
+                                    <Input
+                                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                            e.target.files ? setData('path', e.target.files[0]) : null;
+                                        }}
+                                        type="file"
+                                        name="path"
+                                        id="file"
+                                        accept="application/pdf"
+                                        autoComplete="pdf_file"
+                                        className="h-20 border-none bg-transparent !text-white opacity-0 shadow-none placeholder:text-white focus:border-none focus:ring-0"
+                                    />
+                                </div>
+                                <InputError message={errors.path} className="mt-2" />
+                            </div>
+                            {/* image */}
+                            <div className="col-span-full mb-2">
+                                <label className="required">Image</label>
+                                <div className="flex w-full flex-col items-center justify-center rounded-2xl border border-gray-200 bg-transparent">
+                                    <Label
+                                        htmlFor="file"
+                                        className="relative top-4 z-0 flex w-full flex-1 flex-row items-center justify-between px-3"
+                                    >
+                                        <div className="normal-text text-prime-700">click here to upload</div>
+                                        <UploadIcon className="size-8 text-gray-400" />
+                                    </Label>
+                                    <Input
+                                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                            e.target.files ? setData('image', e.target.files[0]) : null;
+                                        }}
+                                        type="file"
+                                        name="image"
+                                        id="image"
+                                        accept="image/jpg, image/jpeg , image/png"
+                                        className="border-none bg-transparent !text-white opacity-0 shadow-none placeholder:text-white focus:border-none focus:ring-0"
+                                    />
+                                </div>
+                                <InputError message={errors.image} className="mt-2" />
+                                <img src={element.large} className="h-28 w-auto object-contain" />
+                            </div>
+                            {/* reference */}
+                            <div className="grid gap-2">
+                                <Label htmlFor="reference">المرجع</Label>
+                                <Input
+                                    id="reference"
+                                    type="text"
+                                    autoFocus
+                                    tabIndex={1}
+                                    defaultValue={data.reference}
+                                    onChange={(e) => setData('reference', e.target.value)}
+                                    autoComplete="reference"
+                                    name="reference"
+                                    placeholder="reference"
+                                />
+                                <InputError message={errors.reference} className="mt-2" />
+                            </div>
+                            {/* status */}
                             <div className="col-span-1">
                                 <Label htmlFor="title">الحالة</Label>
                                 <div className="flex w-60 flex-row gap-4 py-4">

@@ -1,4 +1,5 @@
 import Backend from '@/actions/App/Http/Controllers/Backend';
+import Frontend from '@/actions/App/Http/Controllers/Frontend';
 import { MainDataTable } from '@/components/MainDataTable';
 import Pagination from '@/components/Pagination';
 import { Button } from '@/components/ui/button';
@@ -74,14 +75,14 @@ export default function ({ elements, query }: SharedData) {
                 header: ({ column }: any) => {
                     return (
                         <Button variant="ghost" className="!p-0 capitalize" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                            مشاهدة الصفحة
+                            محتوى الشهادة
                             <ArrowUpDown className="mx-2 h-4 w-4" />
                         </Button>
                     );
                 },
                 cell: ({ row }: any) => {
                     return (
-                        <div className="text-xxs truncate">
+                        <div className="text-xxs flex flex-row items-start justify-start gap-4 truncate">
                             <Button asChild className="capitalize">
                                 <Link
                                     href={Backend.CertificateController.show(row.original.id, { query: { slug: row.original.title } }).url}
@@ -90,23 +91,6 @@ export default function ({ elements, query }: SharedData) {
                                     <EyeIcon />
                                 </Link>
                             </Button>
-                        </div>
-                    );
-                },
-            },
-            {
-                accessorKey: 'path',
-                header: ({ column }: any) => {
-                    return (
-                        <Button variant="ghost" className="!p-0 capitalize" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                            رابط الشهادة
-                            <ArrowUpDown className="mx-2 h-4 w-4" />
-                        </Button>
-                    );
-                },
-                cell: ({ row }: any) => {
-                    return (
-                        <div className="text-xxs truncate">
                             <Button asChild className="capitalize">
                                 <a href={row.original.path} download target="__blank">
                                     <Download />
@@ -131,25 +115,35 @@ export default function ({ elements, query }: SharedData) {
                                 <MoreHorizontalIcon className="text-gray-400" />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                <DropdownMenuItem className="flex flex-row space-x-1">
-                                    <div>
-                                        <Edit2 />
-                                    </div>
-                                    <div>تعديل البيانات</div>
+                                <DropdownMenuItem>
+                                    <Link href={Backend.CertificateController.edit(element.id).url} className="flex flex-row space-x-1">
+                                        <div>
+                                            <Edit2 />
+                                        </div>
+                                        <div>تعديل البيانات</div>
+                                    </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem className="flex flex-row space-x-1">
-                                    <div>
-                                        <LucideGraduationCap />
-                                    </div>
-                                    <div>قائمة الشهادات</div>
+                                <DropdownMenuItem>
+                                    <Link href={Frontend.FrontendCertificateController.show(element.id).url} className="flex flex-row space-x-1">
+                                        <div>
+                                            <LucideGraduationCap />
+                                        </div>
+                                        <div>عرض كمستخدم خارجي </div>
+                                    </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem className="flex flex-row space-x-1">
-                                    <div>
-                                        <Delete className="text-red-700" />
-                                    </div>
-                                    <div>حذف</div>
+                                <DropdownMenuItem>
+                                    <Link
+                                        href={Backend.CertificateController.destroy(element.id).url}
+                                        method="delete"
+                                        className="flex flex-row space-x-1"
+                                    >
+                                        <div>
+                                            <Delete className="text-red-700" />
+                                        </div>
+                                        <div>حذف</div>
+                                    </Link>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>

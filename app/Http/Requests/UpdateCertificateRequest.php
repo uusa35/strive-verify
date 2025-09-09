@@ -11,7 +11,7 @@ class UpdateCertificateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return auth()->user()->id == 1;
     }
 
     /**

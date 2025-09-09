@@ -88,12 +88,10 @@ export default function () {
                             {element.content && (
                                 <div className="text-md flex flex-col items-start justify-start gap-y-2 border-b border-gray-200 py-4">
                                     <div className="">وصف الشهادة</div>
-                                    <div>
-                                        <div
-                                            dangerouslySetInnerHTML={{ __html: element.content }}
-                                            className="flex h-auto w-full items-center justify-center"
-                                        />
-                                    </div>
+                                    <div
+                                        dangerouslySetInnerHTML={{ __html: element.content }}
+                                        className="flex h-auto w-full flex-col items-start justify-start text-balance"
+                                    />
                                 </div>
                             )}
 
@@ -107,6 +105,18 @@ export default function () {
                                         تحميل الشهادة
                                     </a>
                                 </li>
+                                {element.image.length > 10 && (
+                                    <li>
+                                        <a
+                                            download
+                                            href={element.large}
+                                            target="_blank"
+                                            className="inline-block rounded-sm border border-black bg-[#1b1b18] px-5 py-1.5 text-sm leading-normal text-white hover:border-black hover:bg-black dark:border-[#eeeeec] dark:bg-[#eeeeec] dark:text-[#1C1C1A] dark:hover:border-white dark:hover:bg-white"
+                                        >
+                                            تحميل الصورة
+                                        </a>
+                                    </li>
+                                )}
                             </ul>
                         </div>
                         <div className="relative -mb-px aspect-[335/376] w-full shrink-0 overflow-hidden bg-white lg:mb-0 lg:-ml-px lg:aspect-auto lg:w-[438px] dark:bg-[#1D0002]">

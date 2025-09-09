@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\ImageLargeCast;
 use App\Casts\PathCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,11 +13,13 @@ class Certificate extends Model
     /** @use HasFactory<\Database\Factories\CertificateFactory> */
     use HasFactory;
     protected $guarded = ['id'];
+    protected $appends = ['large'];
     protected $casts = [
         'active' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'path' => PathCast::class,
+        'large' => ImageLargeCast::class,
     ];
 
     public function participant(): BelongsTo
@@ -24,3 +27,4 @@ class Certificate extends Model
         return $this->belongsTo(Participant::class);
     }
 }
+

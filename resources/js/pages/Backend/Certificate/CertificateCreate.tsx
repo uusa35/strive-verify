@@ -16,15 +16,19 @@ interface FormProps {
     content: boolean;
     path: string;
     image: string;
+    active: boolean;
+    reference: string;
 }
 export default function () {
-    const { errors, query } = usePage().props;
+    const { errors, query }: any = usePage().props;
     const { data, setData, put, processing }: any = useForm({
         title: '',
         content: '',
         path: '',
         image: '',
-        participant_id: query.participant_id,
+        reference: '',
+        active: true,
+        participant_id: query?.participant_id,
     });
 
     const breadcrumbs: BreadcrumbItem[] = [

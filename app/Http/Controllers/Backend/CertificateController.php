@@ -27,6 +27,12 @@ class CertificateController extends Controller
      */
     public function create()
     {
+        $validator = validator(request()->all(), [
+            'participant_id' => 'required|exists:participants,id',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors());
+        }
         return inertia('Backend/Certificate/CertificateCreate');
     }
 
@@ -62,7 +68,7 @@ class CertificateController extends Controller
      */
     public function edit(Certificate $certificate)
     {
-        //
+        return inertia('Backend/Certificate/CertificateEdit', ['element' => $certificate]);
     }
 
     /**
@@ -70,7 +76,17 @@ class CertificateController extends Controller
      */
     public function update(UpdateCertificateRequest $request, Certificate $certificate)
     {
-        //
+        $element = $certificate->update($request->except('image', 'path'));
+        $request->file("image") ? $this->saveMimes(
+            $certificate,
+            $request,
+            ["image"],
+            ["1920", "1080"],
+            true,
+            false
+        ) : null;
+        $request->file("path") ? $this->savePath($certificate, $request, "path") : null;
+        return redirect()->route('backend.certificate.index', ['participant_id' => $certificate->participant_id])->with('success', 'تم إضافة الشهادة');
     }
 
     /**
@@ -78,6 +94,7 @@ class CertificateController extends Controller
      */
     public function destroy(Certificate $certificate)
     {
-        //
+        $certificate->delete();
+        return redirect()->back()->with('success', 'تم حذف الشهادة');
     }
 }
