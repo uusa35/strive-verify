@@ -10,7 +10,7 @@ import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
+        title: 'لوحة التحكم',
         href: dashboard(),
         icon: LayoutGrid,
     },

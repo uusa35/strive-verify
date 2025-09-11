@@ -186,6 +186,11 @@ export default function ({ elements, query }: SharedData) {
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex flex-row items-center justify-between gap-4">
                     <h1>قائمة الشهادات</h1>
+                    {query?.participant_id && (
+                        <Button variant="outline" className="w-1/4" asChild>
+                            <Link href={backend.certificate.create({ query: { participant_id: query.participant_id } }).url}>إنشاء شهادة جديدة </Link>
+                        </Button>
+                    )}
                 </div>
                 <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">
                     {elements ? (

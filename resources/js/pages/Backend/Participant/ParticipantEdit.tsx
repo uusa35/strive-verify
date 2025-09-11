@@ -31,7 +31,7 @@ export default function ({ types, element }: SharedData) {
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
-            title: 'Dashboard',
+            title: 'لوحة التحكم',
             href: backend.home().url,
         },
         {

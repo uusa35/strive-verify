@@ -30,6 +30,7 @@ type Props = {
 };
 
 export default function ({ elements }: SharedData) {
+    console.log('elements', elements);
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'لوحة التحكم',

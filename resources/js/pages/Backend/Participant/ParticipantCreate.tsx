@@ -14,7 +14,7 @@ import { LoaderCircle } from 'lucide-react';
 export default function ({ types }: SharedData) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
-            title: 'Dashboard',
+            title: 'لوحة التحكم',
             href: backend.home().url,
         },
         {
