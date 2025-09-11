@@ -6,6 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCertificateRequest;
 use App\Http\Requests\UpdateCertificateRequest;
 use App\Models\Certificate;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Str;
+use Choowx\RasterizeSvg\Svg;
 
 class CertificateController extends Controller
 {
@@ -27,6 +33,7 @@ class CertificateController extends Controller
      */
     public function create()
     {
+
         $validator = validator(request()->all(), [
             'participant_id' => 'required|exists:participants,id',
         ]);
@@ -41,17 +48,50 @@ class CertificateController extends Controller
      */
     public function store(StoreCertificateRequest $request)
     {
-        $element = Certificate::create($request->except('image', 'path'));
-        $request->file("image") ? $this->saveMimes(
-            $element,
-            $request,
-            ["image"],
-            ["1920", "1080"],
-            true,
-            false
-        ) : null;
-        $request->file("path") ? $this->savePath($element, $request, "path") : null;
-        return redirect()->route('backend.certificate.index', ['participant_id' => $element->participant_id])->with('success', 'تم إضافة الشهادة');
+
+        try {
+            $element = Certificate::create($request->except('image', 'path'));
+            $request->file("image") ? $this->saveMimes(
+                $element,
+                $request,
+                ["image"],
+                ["1920", "1080"],
+                true,
+                false
+            ) : null;
+            $request->file("path") ? $this->savePath($element, $request, "path") : null;
+            $svgCode =   QrCode::merge(public_path('images/logo_english.jpg'), 0.2, true)
+                ->size(800)
+                ->style('dot', 0.9)
+                ->format('svg')
+                ->backgroundColor(255, 255, 255)
+                ->errorCorrection('H')
+                ->eyeColor(0, 1, 194, 211, 0, 0, 0)
+                ->eyeColor(1, 1, 194, 211, 0, 0, 0)
+                ->eyeColor(2, 1, 194, 211, 0, 0, 0)
+                ->generate(route('certificate.show', $element->id));
+
+            // $tempSvgPath = tempnam(sys_get_temp_dir(), 'svg_');
+            // $defaultFilename = 'default.svg';
+            // $defaultPath = storage_path("app/public/uploads/images/qr/{$defaultFilename}");
+            // File::ensureDirectoryExists(dirname($defaultPath));
+            // File::put($defaultPath, $svgCode);
+            Svg::make($svgCode)->saveAsPng(storage_path("app/public/uploads/images/qr/{$element->id}.png"));
+
+            $element->update(['qr' => "{$element->id}.png"]);
+            // File::copy($defaultPath, storage_path("app/public/uploads/images/qr/{$newFileName
+
+
+            // $newFileName = time() . '.svg';
+            // $newFilePath = storage_path(
+            //     "app/public/uploads/images/qr/{$newFileName}"
+            // );
+            // File::put($newFilePath, $svgCode);
+            // $element->update(['qr' => $newFileName]);
+            return redirect()->route('backend.certificate.index', ['participant_id' => $element->participant_id])->with('success', 'تم إضافة الشهادة');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**

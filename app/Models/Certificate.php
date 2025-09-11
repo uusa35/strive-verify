@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\ImageLargeCast;
+use App\Casts\ImageQrCast;
 use App\Casts\PathCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +21,7 @@ class Certificate extends Model
         'updated_at' => 'datetime',
         'path' => PathCast::class,
         'large' => ImageLargeCast::class,
+        'qr' => ImageQrCast::class,
     ];
 
     public function participant(): BelongsTo

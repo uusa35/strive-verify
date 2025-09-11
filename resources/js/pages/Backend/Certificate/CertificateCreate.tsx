@@ -86,7 +86,7 @@ export default function () {
                                 <Input
                                     id="title"
                                     type="text"
-                                    required
+                                    // required
                                     autoFocus
                                     tabIndex={1}
                                     defaultValue={data.title}
@@ -119,7 +119,7 @@ export default function () {
                                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                             e.target.files ? setData('path', e.target.files[0]) : null;
                                         }}
-                                        required
+                                        // required
                                         type="file"
                                         name="path"
                                         id="file"
