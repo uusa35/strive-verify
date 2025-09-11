@@ -69,8 +69,12 @@ class CertificateController extends Controller
                 ->eyeColor(1, 1, 194, 211, 0, 0, 0)
                 ->eyeColor(2, 1, 194, 211, 0, 0, 0)
                 ->generate(route('certificate.show', $element->id));
+            File::put(
+                storage_path("app/public/uploads/images/qr/{$element->id}.svg"),
+                $svgCode
+            );
             Svg::make($svgCode)->saveAsPng(storage_path("app/public/uploads/images/qr/{$element->id}.png"));
-            $element->update(['qr' => "{$element->id}.png"]);
+            $element->update(['qr' => "{$element->id}.svg"]);
             return redirect()->route('backend.certificate.index', ['participant_id' => $element->participant_id])->with('success', 'تم إضافة الشهادة');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
