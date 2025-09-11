@@ -2,6 +2,17 @@ import Backend from '@/actions/App/Http/Controllers/Backend';
 import Frontend from '@/actions/App/Http/Controllers/Frontend';
 import { MainDataTable } from '@/components/MainDataTable';
 import Pagination from '@/components/Pagination';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import AppLayout from '@/layouts/app-layout';
@@ -133,18 +144,33 @@ export default function ({ elements, query }: SharedData) {
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem>
-                                    <Link
-                                        href={Backend.CertificateController.destroy(element.id).url}
-                                        method="delete"
-                                        className="flex flex-row space-x-1"
-                                    >
-                                        <div>
-                                            <Delete className="text-red-700" />
+
+                                <AlertDialog>
+                                    <AlertDialogTrigger className="m-3 w-full hover:bg-gray-100">
+                                        <div className="flex flex-row space-x-1">
+                                            <div>
+                                                <Delete className="text-red-700" />
+                                            </div>
+                                            <div>حذف</div>
                                         </div>
-                                        <div>حذف</div>
-                                    </Link>
-                                </DropdownMenuItem>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent className="text-start">
+                                        <AlertDialogHeader className="text-start">
+                                            <AlertDialogTitle className="text-start">تأكيد حذف العنصر ؟</AlertDialogTitle>
+                                            <AlertDialogDescription className="text-start">
+                                                يرجى العلم بأن هذا الحذف نهائي ولا يمكن الرجوع للاستعلام بعد الحذف
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter className="text-start">
+                                            <AlertDialogCancel>الغاء</AlertDialogCancel>
+                                            <AlertDialogAction asChild className="flex flex-row space-x-1 bg-red-600 text-white">
+                                                <Link href={Backend.CertificateController.destroy(element.id).url} method="delete">
+                                                    تأكيد
+                                                </Link>
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     );

@@ -1,5 +1,17 @@
+import Backend from '@/actions/App/Http/Controllers/Backend';
 import { MainDataTable } from '@/components/MainDataTable';
 import Pagination from '@/components/Pagination';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -11,7 +23,6 @@ import { Head, Link } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, Delete, Edit2, LucideGraduationCap, MoreHorizontalIcon, PlusSquareIcon } from 'lucide-react';
 import { useMemo } from 'react';
-
 type Props = {
     id: string;
     name: string;
@@ -19,7 +30,6 @@ type Props = {
 };
 
 export default function ({ elements }: SharedData) {
-    console.log('elements', elements);
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'لوحة التحكم',
@@ -162,12 +172,33 @@ export default function ({ elements }: SharedData) {
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem className="flex flex-row space-x-1">
-                                    <div>
-                                        <Delete className="text-red-700" />
-                                    </div>
-                                    <div>حذف</div>
-                                </DropdownMenuItem>
+                                <AlertDialog>
+                                    <AlertDialogTrigger className="m-3 w-full hover:bg-gray-100">
+                                        <div className="flex flex-row space-x-1">
+                                            <div>
+                                                <Delete className="text-red-700" />
+                                            </div>
+                                            <div>حذف</div>
+                                        </div>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent className="text-start">
+                                        <AlertDialogHeader className="text-start">
+                                            <AlertDialogTitle className="text-start">تأكيد حذف المشارك ؟</AlertDialogTitle>
+                                            <AlertDialogDescription className="text-start">
+                                                يرجى العلم بأن هذا الحذف نهائي ولا يمكن الرجوع للاستعلام بعد الحذف سيتم حذف جميع الشهادات المتعلقة
+                                                بهذا المشارك ولن تكون متاحة
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter className="text-start">
+                                            <AlertDialogCancel>الغاء</AlertDialogCancel>
+                                            <AlertDialogAction asChild className="flex flex-row space-x-1 bg-red-600 text-white">
+                                                <Link href={Backend.ParticipantController.destroy(row.original.id).url} method="delete">
+                                                    تأكيد
+                                                </Link>
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     );

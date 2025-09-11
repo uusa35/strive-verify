@@ -67,7 +67,6 @@ export default function ({ types, element }: SharedData) {
         );
     };
 
-    console.log('data', data);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`${appName} - تعديل مشارك `} />

@@ -48,7 +48,6 @@ class CertificateController extends Controller
      */
     public function store(StoreCertificateRequest $request)
     {
-
         try {
             $element = Certificate::create($request->except('image', 'path'));
             $request->file("image") ? $this->saveMimes(
@@ -70,24 +69,8 @@ class CertificateController extends Controller
                 ->eyeColor(1, 1, 194, 211, 0, 0, 0)
                 ->eyeColor(2, 1, 194, 211, 0, 0, 0)
                 ->generate(route('certificate.show', $element->id));
-
-            // $tempSvgPath = tempnam(sys_get_temp_dir(), 'svg_');
-            // $defaultFilename = 'default.svg';
-            // $defaultPath = storage_path("app/public/uploads/images/qr/{$defaultFilename}");
-            // File::ensureDirectoryExists(dirname($defaultPath));
-            // File::put($defaultPath, $svgCode);
             Svg::make($svgCode)->saveAsPng(storage_path("app/public/uploads/images/qr/{$element->id}.png"));
-
             $element->update(['qr' => "{$element->id}.png"]);
-            // File::copy($defaultPath, storage_path("app/public/uploads/images/qr/{$newFileName
-
-
-            // $newFileName = time() . '.svg';
-            // $newFilePath = storage_path(
-            //     "app/public/uploads/images/qr/{$newFileName}"
-            // );
-            // File::put($newFilePath, $svgCode);
-            // $element->update(['qr' => $newFileName]);
             return redirect()->route('backend.certificate.index', ['participant_id' => $element->participant_id])->with('success', 'تم إضافة الشهادة');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -126,7 +109,7 @@ class CertificateController extends Controller
             false
         ) : null;
         $request->file("path") ? $this->savePath($certificate, $request, "path") : null;
-        return redirect()->route('backend.certificate.index', ['participant_id' => $certificate->participant_id])->with('success', 'تم إضافة الشهادة');
+        return redirect()->route('backend.certificate.index', ['participant_id' => $certificate->participant_id])->with('success', 'تم تحديث الشهادة');
     }
 
     /**

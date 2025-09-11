@@ -31,8 +31,6 @@ export default function ({ element }: SharedData) {
         participant_id: element.participant_id,
     });
 
-    console.log('element', element);
-
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Dashboard',
