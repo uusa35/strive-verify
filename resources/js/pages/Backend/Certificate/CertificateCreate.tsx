@@ -86,7 +86,7 @@ export default function () {
                                 <Input
                                     id="title"
                                     type="text"
-                                    // required
+                                    required
                                     autoFocus
                                     tabIndex={1}
                                     defaultValue={data.title}
@@ -98,7 +98,7 @@ export default function () {
                             </div>
                             {/* content */}
                             <div className="col-span-full">
-                                <Label htmlFor="title" aria-required className="required">
+                                <Label htmlFor="title" aria-required>
                                     محتوى الشهادة
                                 </Label>
                                 <TextEditor name="content" setData={setData} data={data} defaultValue={data.content} />
@@ -119,7 +119,6 @@ export default function () {
                                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                             e.target.files ? setData('path', e.target.files[0]) : null;
                                         }}
-                                        // required
                                         type="file"
                                         name="path"
                                         id="file"
@@ -132,13 +131,13 @@ export default function () {
                             </div>
                             {/* image */}
                             <div className="col-span-full mb-2">
-                                <label className="required">Image</label>
+                                <label>صورة متعلقة</label>
                                 <div className="flex w-full flex-col items-center justify-center rounded-2xl border border-gray-200 bg-transparent">
                                     <Label
                                         htmlFor="file"
                                         className="relative top-4 z-0 flex w-full flex-1 flex-row items-center justify-between px-3"
                                     >
-                                        <div className="normal-text text-prime-700">click here to upload</div>
+                                        <div className="normal-text text-prime-700">اضغط هنا لرفع الصورة المطلوبة</div>
                                         <UploadIcon className="size-8 text-gray-400" />
                                     </Label>
                                     <Input

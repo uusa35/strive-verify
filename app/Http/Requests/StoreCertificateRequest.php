@@ -23,8 +23,8 @@ class StoreCertificateRequest extends FormRequest
     {
         return [
             'title' => 'required|min:3|max:255',
-            'content' => 'nullable',
-            'path' => 'required|max:100000|mimes:xlsx,doc,docx,ppt,pptx,pdf,zip',
+            'content' => 'nullable|max:100000',
+            'path' => 'nullable|max:100000|mimes:xlsx,doc,docx,ppt,pptx,pdf,zip',
             'image' => 'nullable|image|max:100000',
             'participant_id' => 'required|exists:participants,id',
             'active' => 'required|in:1,0',

@@ -75,16 +75,18 @@ export default function ({ auth, element }: SharedData) {
                                 )}
 
                                 <ul className="mt-8 flex flex-row items-center justify-center gap-3 text-sm leading-normal">
-                                    <li>
-                                        <a
-                                            download
-                                            href={element.path}
-                                            target="_blank"
-                                            className="md:text-md inline-block rounded-sm border border-black bg-[#1b1b18] px-5 py-1.5 text-sm leading-normal text-white hover:border-black hover:bg-black dark:border-[#eeeeec] dark:bg-[#eeeeec] dark:text-[#1C1C1A] dark:hover:border-white dark:hover:bg-white"
-                                        >
-                                            الشهادة
-                                        </a>
-                                    </li>
+                                    {element.path && (
+                                        <li>
+                                            <a
+                                                download
+                                                href={element.path}
+                                                target="_blank"
+                                                className="md:text-md inline-block rounded-sm border border-black bg-[#1b1b18] px-5 py-1.5 text-sm leading-normal text-white hover:border-black hover:bg-black dark:border-[#eeeeec] dark:bg-[#eeeeec] dark:text-[#1C1C1A] dark:hover:border-white dark:hover:bg-white"
+                                            >
+                                                الشهادة
+                                            </a>
+                                        </li>
+                                    )}
                                     {element.image && element.image.length > 10 && (
                                         <li>
                                             <a
