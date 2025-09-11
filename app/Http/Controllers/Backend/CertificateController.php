@@ -61,13 +61,13 @@ class CertificateController extends Controller
             $request->file("path") ? $this->savePath($element, $request, "path") : null;
             $svgCode =   QrCode::merge(public_path('images/logo_english.jpg'), 0.2, true)
                 ->size(800)
-                ->style('dot', 0.9)
+                // ->style('dot', 0.9)
                 ->format('svg')
                 ->backgroundColor(255, 255, 255)
                 ->errorCorrection('H')
-                ->eyeColor(0, 1, 194, 211, 0, 0, 0)
-                ->eyeColor(1, 1, 194, 211, 0, 0, 0)
-                ->eyeColor(2, 1, 194, 211, 0, 0, 0)
+                // ->eyeColor(0, 1, 194, 211, 0, 0, 0)
+                // ->eyeColor(1, 1, 194, 211, 0, 0, 0)
+                // ->eyeColor(2, 1, 194, 211, 0, 0, 0)
                 ->generate(route('certificate.show', $element->id));
             File::put(
                 storage_path("app/public/uploads/images/qr/{$element->id}.svg"),
