@@ -10,9 +10,9 @@ class HomeController extends Controller
     public function __invoke()
     {
         if (request()->has('type')) {
-            $elements = Participant::where('type', request('type'))->orderBy('id', 'desc')->paginate(SELF::TAKE_LARGE);
+            $elements = Participant::where('type', request('type'))->orderBy('id', 'desc')->withCount('certificates')->paginate(SELF::TAKE_LARGE);
         } else {
-            $elements = Participant::orderBy('id', 'desc')->paginate(SELF::TAKE_LARGE);
+            $elements = Participant::orderBy('id', 'desc')->withCount('certificates')->paginate(SELF::TAKE_LARGE);
         }
         return inertia('Backend/Participant/ParticipantIndex', compact('elements'));
     }
