@@ -18,7 +18,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import AppLayout from '@/layouts/app-layout';
 import { appName } from '@/lib/constants';
 import backend, { home } from '@/routes/backend';
-import { BreadcrumbItem, SharedData } from '@/types';
+import { BreadcrumbItem, Certificate, SharedData } from '@/types';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import { Head, Link } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
@@ -26,9 +26,8 @@ import { ArrowUpDown, Delete, Download, Edit2, LucideGraduationCap, MoreHorizont
 import { useMemo } from 'react';
 
 type Props = {
-    id: string;
-    name: string;
-    date: string;
+    links: [];
+    data: Certificate[];
 };
 
 export default function ({ elements, query }: SharedData) {
@@ -42,7 +41,7 @@ export default function ({ elements, query }: SharedData) {
             href: backend.certificate.index({ query: query ? { ...query } : {} }).url,
         },
     ];
-    const columns: ColumnDef<Props>[] = useMemo(
+    const columns: ColumnDef<Certificate>[] = useMemo(
         () => [
             {
                 accessorKey: 'id',
@@ -64,8 +63,22 @@ export default function ({ elements, query }: SharedData) {
                 },
             },
             {
+                accessorKey: 'reference',
+                header: ({ column }) => {
+                    return (
+                        <Button variant="ghost" className="!p-0 capitalize" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+                            المرجع
+                            <ArrowUpDown className="mx-2 h-4 w-4" />
+                        </Button>
+                    );
+                },
+                cell: ({ row }) => {
+                    return <div className="flex flex-row items-center justify-start text-balance">{row.original.reference}</div>;
+                },
+            },
+            {
                 accessorKey: 'title',
-                header: ({ column }: any) => {
+                header: ({ column }) => {
                     return (
                         <Button variant="ghost" className="!p-0 capitalize" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
                             العنوان
@@ -74,16 +87,12 @@ export default function ({ elements, query }: SharedData) {
                     );
                 },
                 cell: ({ row }: any) => {
-                    return (
-                        <div className="sm-text flex flex-col items-start justify-start gap-y-2 truncate">
-                            <div>{row.original.title}</div>
-                        </div>
-                    );
+                    return <div className="sm-text flex flex-col items-start justify-start gap-y-2 text-balance">{row.original.title}</div>;
                 },
             },
             {
                 accessorKey: 'path',
-                header: ({ column }: any) => {
+                header: ({ column }) => {
                     return (
                         <Button variant="ghost" className="!p-0 capitalize" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
                             محتوى الشهادة
@@ -91,7 +100,7 @@ export default function ({ elements, query }: SharedData) {
                         </Button>
                     );
                 },
-                cell: ({ row }: any) => {
+                cell: ({ row }) => {
                     return (
                         <div className="text-xxs flex flex-row items-start justify-start gap-4 truncate">
                             <Button asChild className="capitalize">

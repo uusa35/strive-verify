@@ -18,15 +18,14 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import AppLayout from '@/layouts/app-layout';
 import { appName } from '@/lib/constants';
 import backend, { home as backendHome } from '@/routes/backend';
-import { BreadcrumbItem, SharedData } from '@/types';
+import { BreadcrumbItem, Participant, SharedData } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, Delete, Edit2, LucideGraduationCap, MoreHorizontalIcon, PlusSquareIcon } from 'lucide-react';
 import { useMemo } from 'react';
 type Props = {
-    id: string;
-    name: string;
-    date: string;
+    links: [];
+    data: Participant[];
 };
 
 export default function ({ elements }: SharedData) {
@@ -37,7 +36,7 @@ export default function ({ elements }: SharedData) {
             href: backendHome().url,
         },
     ];
-    const columns: ColumnDef<Props>[] = useMemo(
+    const columns: ColumnDef<Participant>[] = useMemo(
         () => [
             {
                 accessorKey: 'id',
@@ -60,7 +59,7 @@ export default function ({ elements }: SharedData) {
             },
             {
                 accessorKey: 'name',
-                header: ({ column }: any) => {
+                header: ({ column }) => {
                     return (
                         <Button variant="ghost" className="!p-0 capitalize" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
                             الاسم
@@ -68,12 +67,8 @@ export default function ({ elements }: SharedData) {
                         </Button>
                     );
                 },
-                cell: ({ row }: any) => {
-                    return (
-                        <div className="sm-text flex flex-col items-start justify-start gap-y-2 truncate">
-                            <div>{row.original.name}</div>
-                        </div>
-                    );
+                cell: ({ row }) => {
+                    return <div className="sm-text flex w-90 flex-col items-start justify-start gap-y-2 text-balance">{row.original.name}</div>;
                 },
             },
             {

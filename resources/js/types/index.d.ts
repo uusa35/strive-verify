@@ -40,5 +40,28 @@ export interface User {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
+    [key: string]: unknown;
+}
+
+
+export interface Participant {
+    id: number;
+    name: string;
+    title?: string;
+    email?: string;
+    civil_id?: string;
+    active?: boolean;
+    [key: string]: unknown;
+}
+export interface Certificate {
+    id: number;
+    name: string;
+    reference: string;
+    path: URL;
+    image: string;
+    participant_id: string | number;
+    participant?: Participant[]
+    created_at: string;
+    updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
