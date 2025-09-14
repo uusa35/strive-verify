@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "/usr/local/Cellar/php@8.2/8.2.28_1/bin/php",
+            "args": [
+                "/Users/usama/Sites/strive-verify/artisan",
+                "boost:mcp"
+            ]
+        }
+    }
+}
