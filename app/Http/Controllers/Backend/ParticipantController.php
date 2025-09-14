@@ -16,10 +16,11 @@ class ParticipantController extends Controller
     public function index()
     {
         if (request()->has('type')) {
-            $elements = Participant::where('type', request('type'))->orderBy('id', 'desc')->withCount('certificates')->paginate(SELF::TAKE_MAX);
+            $elements = Participant::search(request()->search)->query(fn($q) => $q->where('type', request('type'))->withCount('certificates'))->orderBy('id', 'desc')->paginate(self::TAKE_MIN);
         } else {
-            $elements = Participant::orderBy('id', 'desc')->withCount('certificates')->paginate(SELF::TAKE_MAX);
+            $elements = Participant::search(request()->search)->query(fn($q) => $q->withCount('certificates'))->orderBy('id', 'desc')->paginate(self::TAKE_MIN);
         }
+
         return inertia('Backend/Participant/ParticipantIndex', compact('elements'));
     }
 
@@ -29,6 +30,7 @@ class ParticipantController extends Controller
     public function create()
     {
         $types = collect(ParticipantTypeEnum::cases())->pluck('value');
+
         return inertia('Backend/Participant/ParticipantCreate', compact('types'));
     }
 
@@ -38,6 +40,7 @@ class ParticipantController extends Controller
     public function store(StoreParticipantRequest $request)
     {
         Participant::create($request->validated());
+
         return redirect()->route('backend.participant.index')->with('success', 'تم إضافة المشارك');
     }
 
@@ -52,6 +55,7 @@ class ParticipantController extends Controller
     public function edit(Participant $participant)
     {
         $types = collect(ParticipantTypeEnum::cases())->pluck('value');
+
         return inertia('Backend/Participant/ParticipantEdit', ['element' => $participant, 'types' => $types]);
     }
 
@@ -60,8 +64,9 @@ class ParticipantController extends Controller
      */
     public function update(UpdateParticipantRequest $request, Participant $participant)
     {
-        
+
         $participant->update($request->validated());
+
         return redirect()->route('backend.participant.index')->with('success', 'تم تعديل المشارك');
     }
 
@@ -72,6 +77,7 @@ class ParticipantController extends Controller
     {
         $participant->certificates()->delete();
         $participant->delete();
+
         return redirect()->back()->with('success', 'تم حذف المشارك');
     }
 }

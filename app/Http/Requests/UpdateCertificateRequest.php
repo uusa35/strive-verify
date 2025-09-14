@@ -24,9 +24,23 @@ class UpdateCertificateRequest extends FormRequest
         return [
             'title' => 'required|min:3|max:255',
             'content' => 'nullable|max:100000',
-            'path' => 'nullable|max:100000|mimes:xlsx,doc,docx,ppt,pptx,pdf,zip',
-            'image' => 'nullable|imax:100000',
+            'path' => 'nullable|max:255',
+            // 'image' => 'nullable|imax:100000',
             'active' => 'required|in:1,0',
         ];
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator($validator): void
+    {
+        $validator->sometimes('path', 'mimes:xlsx,doc,docx,ppt,pptx,pdf,zip|max:100000', function ($input) {
+            return $input->path instanceof \Illuminate\Http\UploadedFile;
+        });
+
+        $validator->sometimes('path', 'string', function ($input) {
+            return is_string($input->path);
+        });
     }
 }
