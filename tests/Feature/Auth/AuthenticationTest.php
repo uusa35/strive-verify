@@ -11,6 +11,8 @@ test('login screen can be rendered', function () {
 });
 
 test('users can authenticate using the login screen', function () {
+    // Create an admin user first (so regular users get ID > 1)
+    User::factory()->create(['id' => 1]);
     $user = User::factory()->create();
 
     $response = $this->post(route('login.store'), [

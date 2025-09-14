@@ -23,7 +23,7 @@ class CertificateFactory extends Factory
             'reference' => fake()->numberBetween([11111, 9999999999]),
             'path' => 'test.pdf',
             'image' => 'default.png',
-            'participant_id' => Participant::student()->get()->random()->id
+            'participant_id' => Participant::factory()->create(['type' => \App\Enums\ParticipantTypeEnum::STUDENT]),
         ];
     }
 }

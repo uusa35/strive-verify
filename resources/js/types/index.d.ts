@@ -57,7 +57,7 @@ export interface Certificate {
     id: number;
     name: string;
     reference: string;
-    path: URL;
+    path: string;
     image: string;
     participant_id: string | number;
     participant?: Participant[]
