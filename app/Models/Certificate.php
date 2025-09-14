@@ -8,13 +8,17 @@ use App\Casts\PathCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Laravel\Scout\Searchable;
 
 class Certificate extends Model
 {
     /** @use HasFactory<\Database\Factories\CertificateFactory> */
-    use HasFactory;
+    use HasFactory, Searchable;
+
     protected $guarded = ['id'];
+
     protected $appends = ['large'];
+
     protected $casts = [
         'active' => 'boolean',
         'created_at' => 'datetime',
@@ -28,5 +32,13 @@ class Certificate extends Model
     {
         return $this->belongsTo(Participant::class);
     }
-}
 
+    public function toSearchableArray()
+    {
+        return [
+            'title' => $this->title,
+            'content' => $this->content,
+            'reference' => $this->reference,
+        ];
+    }
+}

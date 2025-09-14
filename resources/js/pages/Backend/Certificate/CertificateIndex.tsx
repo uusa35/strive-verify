@@ -2,6 +2,7 @@ import Backend from '@/actions/App/Http/Controllers/Backend';
 import Frontend from '@/actions/App/Http/Controllers/Frontend';
 import { MainDataTable } from '@/components/MainDataTable';
 import Pagination from '@/components/Pagination';
+import SearchForm from '@/components/SearchForm';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -202,6 +203,9 @@ export default function ({ elements, query }: SharedData) {
                     )}
                 </div>
                 <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">
+                    <div>
+                        <SearchForm baseUrl={backend.certificate.index().url} />
+                    </div>
                     {elements ? (
                         <>
                             <MainDataTable
@@ -209,7 +213,7 @@ export default function ({ elements, query }: SharedData) {
                                 data={elements.data}
                                 resetPath={backend.certificate.index().url}
                                 showDataTablePagination={false}
-                                showSearch={true}
+                                showSearch={false}
                             />
                             <Pagination links={elements?.links} />
                         </>

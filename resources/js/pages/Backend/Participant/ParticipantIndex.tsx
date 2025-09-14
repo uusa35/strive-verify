@@ -1,6 +1,7 @@
 import Backend from '@/actions/App/Http/Controllers/Backend';
 import { MainDataTable } from '@/components/MainDataTable';
 import Pagination from '@/components/Pagination';
+import SearchForm from '@/components/SearchForm';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -23,13 +24,8 @@ import { Head, Link } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, Delete, Edit2, LucideGraduationCap, MoreHorizontalIcon, PlusSquareIcon } from 'lucide-react';
 import { useMemo } from 'react';
-type Props = {
-    links: [];
-    data: Participant[];
-};
 
-export default function ({ elements }: SharedData) {
-    console.log('elements', elements);
+export default function ({ elements, query }: SharedData) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'لوحة التحكم',
@@ -215,6 +211,9 @@ export default function ({ elements }: SharedData) {
                     </Button>
                 </div>
                 <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">
+                    <div>
+                        <SearchForm baseUrl={backend.participant.index().url} />
+                    </div>
                     {elements ? (
                         <>
                             <MainDataTable
@@ -222,7 +221,7 @@ export default function ({ elements }: SharedData) {
                                 data={elements.data}
                                 resetPath={backend.participant.index().url}
                                 showDataTablePagination={false}
-                                showSearch={true}
+                                showSearch={false}
                             />
                             <Pagination links={elements?.links} />
                         </>
