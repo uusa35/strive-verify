@@ -24,7 +24,7 @@ class UpdateCertificateRequest extends FormRequest
         return [
             'title' => 'required|min:3|max:255',
             'content' => 'nullable|max:100000',
-            'path' => 'nullable|max:255',
+            'path' => 'nullable|max:100000|mimes:xlsx,doc,docx,ppt,pptx,pdf,zip',
             // 'image' => 'nullable|imax:100000',
             'active' => 'required|in:1,0',
         ];

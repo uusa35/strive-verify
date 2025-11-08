@@ -113,6 +113,7 @@ class CertificateController extends Controller
             false
         ) : null;
         $request->file("path") ? $this->savePath($certificate, $request, "path") : null;
+
         return redirect()->route('backend.certificate.index', ['participant_id' => $certificate->participant_id])->with('success', 'تم تحديث الشهادة');
     }
 
